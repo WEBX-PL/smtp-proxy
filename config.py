@@ -1,1 +1,1 @@
-HOSTNAME = "localhost"
+HOSTNAME = "0.0.0.0"

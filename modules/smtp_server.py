@@ -16,7 +16,7 @@ class SMTPHandler:
 
 
 async def start_smtp_server():
-    controller = Controller(SMTPHandler(), hostname="localhost", port=9999)
+    controller = Controller(SMTPHandler(), hostname=HOSTNAME, port=9999)
     controller.start()
 
     print("SMTP server started:", controller.hostname, controller.port)

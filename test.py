@@ -2,7 +2,7 @@ from smtplib import SMTP as Client
 
 
 def main():
-    client = Client("localhost", 9999)
+    client = Client("164.90.161.12", 9999)
     r = client.sendmail('a@example.com', ['b@example.com'], """\
     From: Anne Person <anne@example.com>
     To: Bart Person <bart@example.com>

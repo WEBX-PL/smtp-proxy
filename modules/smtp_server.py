@@ -1,6 +1,7 @@
 from aiosmtpd.controller import Controller
 
 from config import HOSTNAME
+from modules.db import create_email
 
 
 class SMTPHandler:
@@ -12,6 +13,7 @@ class SMTPHandler:
             print(f'> {ln}'.strip())
         print()
         print('End of message')
+        await create_email(envelope.mail_from, envelope.rcpt_tos, str(envelope.content))
         return '250 Message accepted for delivery'
 
 

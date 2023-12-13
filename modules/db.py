@@ -3,6 +3,7 @@ import uuid
 
 import aiosqlite
 
+
 async def connect():
     db = await aiosqlite.connect(database="db.sqlite")
 
@@ -49,3 +50,25 @@ async def get_emails():
     await db.close()
 
     return data
+
+
+async def get_email(id):
+    db = await connect()
+    cursor = await db.execute('SELECT * FROM email WHERE id = ?', (id,))
+    row = await cursor.fetchone()
+
+    await cursor.close()
+    await db.close()
+
+    if not row:
+        return None
+
+    id, created_at, updated_at, mail_from, rcpt_tos, content = row
+    return dict(
+        id=id,
+        created_at=created_at,
+        updated_at=updated_at,
+        mail_from=mail_from,
+        rcpt_tos=json.loads(rcpt_tos),
+        content=content,
+    )

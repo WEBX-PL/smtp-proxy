@@ -1,4 +1,5 @@
 from aiosmtpd.controller import Controller
+from aiosmtpd.smtp import AuthResult
 
 from config import HOSTNAME
 from modules.db import create_email
@@ -16,9 +17,16 @@ class SMTPHandler:
         await create_email(envelope.mail_from, envelope.rcpt_tos, str(envelope.content))
         return '250 Message accepted for delivery'
 
+class Authenticator:
+    def __call__(self, server, session, envelope, mechanism, auth_data):
+        return AuthResult(success=True)
 
 async def start_smtp_server():
-    controller = Controller(SMTPHandler(), hostname=HOSTNAME, port=9999)
-    controller.start()
+    controller = Controller(SMTPHandler(), hostname=HOSTNAME, port=9999, authenticator=Authenticator())
+    try:
+        controller.start()
+        print("SMTP server started:", controller.hostname, controller.port)
+    finally:
+        controller.stop()
 
-    print("SMTP server started:", controller.hostname, controller.port)
+

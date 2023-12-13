@@ -28,10 +28,9 @@ class Authenticator:
         return AuthResult(success=True)
 
 
-async def start_smtp_server():
-    controller = Controller(SMTPHandler(), hostname="127.0.0.1", port=5001, authenticator=Authenticator(),
+async def start_smtp_server(host, port):
+    controller = Controller(SMTPHandler(), hostname=host, port=port, authenticator=Authenticator(),
                             auth_require_tls=False)
-    # controller = Controller(SMTPHandler(), hostname=HOSTNAME, port=9999)
-
     controller.start()
+
     print("SMTP server started:", controller.hostname, controller.port)

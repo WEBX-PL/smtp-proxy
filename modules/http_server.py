@@ -6,7 +6,7 @@ from config import HOSTNAME
 from modules.db import get_emails, get_email
 
 
-async def start_http_server():
+async def start_http_server(host, port):
     app = web.Application()
 
     async def emails_list(request):
@@ -28,7 +28,7 @@ async def start_http_server():
 
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, HOSTNAME, 8080)
+    site = web.TCPSite(runner, host, port)
     await site.start()
 
     print("WEB server started:", site._host, site._port)

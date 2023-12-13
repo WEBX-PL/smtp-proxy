@@ -28,7 +28,7 @@ async def start_http_server():
 
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, HOSTNAME, 80)
+    site = web.TCPSite(runner, HOSTNAME, 8080)
     await site.start()
 
     print("WEB server started:", site._host, site._port)

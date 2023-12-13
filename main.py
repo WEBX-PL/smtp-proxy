@@ -1,10 +1,12 @@
 import asyncio
+import logging
 
 from modules.http_server import start_http_server
 from modules.smtp_server import start_smtp_server
 
 
 async def main():
+    logging.basicConfig(level=logging.DEBUG)
     await asyncio.gather(
         start_http_server(),
         start_smtp_server(),

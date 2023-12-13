@@ -47,3 +47,5 @@ async def get_emails():
         ))
     await cursor.close()
     await db.close()
+
+    return data

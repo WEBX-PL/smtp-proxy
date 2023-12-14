@@ -19,6 +19,7 @@ class SMTPHandler:
         print()
         print('End of message')
         email = await create_email(envelope.mail_from, envelope.rcpt_tos, str(envelope.content))
+
         await send_notification(email)
         return '250 Message accepted for delivery'
 

@@ -61,8 +61,6 @@ async def start_http_server(host, port):
         if id:
             email = await get_email(id)
             if email:
-                subject, body = parse_email(email['content'])
-
                 return web.Response(text=json.dumps(dict(
                     id=email['id'],
                     sent=email['sent'],
@@ -70,8 +68,8 @@ async def start_http_server(host, port):
                     updated_at=email['updated_at'],
                     mail_from=email['mail_from'],
                     rcpt_tos=email['rcpt_tos'],
-                    subject=subject,
-                    body=body,
+                    subject=email['subject'],
+                    body=email['body'],
                 )))
 
         return web.Response(text="NOT")

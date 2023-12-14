@@ -3,6 +3,8 @@ import uuid
 
 import aiosqlite
 
+from modules.parse_email import parse_email
+
 
 async def connect():
     db = await aiosqlite.connect(database="db.sqlite")
@@ -81,6 +83,7 @@ async def get_email(id):
         return None
 
     id, created_at, updated_at, mail_from, rcpt_tos, content, sent = row
+    subject, body = parse_email(content)
 
     return dict(
         id=id,
@@ -89,6 +92,8 @@ async def get_email(id):
         mail_from=mail_from,
         rcpt_tos=json.loads(rcpt_tos),
         content=content,
+        subject=subject,
+        body=body,
         sent=sent
     )
 

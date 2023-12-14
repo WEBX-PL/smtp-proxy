@@ -42,9 +42,16 @@ async def send_notification(email):
                         },
                         {
                             "type": "mrkdwn",
-                            "text": "*Content:*\n" + str(email['content'])
+                            "text": "*Subject:*\n" + str(email['subject'])
                         },
                     ]
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": email['message']
+                    }
                 },
                 {
                     "type": "actions",

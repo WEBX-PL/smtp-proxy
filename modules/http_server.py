@@ -1,19 +1,37 @@
 import json
+import os
 
 from aiohttp import web
 
-from config import HOSTNAME
-from modules.db import get_emails, get_email
+from modules.db import get_emails, get_email, clear_db
+
+
+def check_password(request):
+    user_password = str(request.rel_url.query['pass'])
+    password = str(os.getenv('PASSWORD'))
+
+    if not password or not user_password or user_password != password:
+        raise ValueError("Invalid password")
 
 
 async def start_http_server(host, port):
     app = web.Application()
 
     async def emails_list(request):
+        try:
+            check_password(request)
+        except Exception as e:
+            return web.Response(text=str(e))
+
         emails = await get_emails()
         return web.Response(text=json.dumps({"emails": emails}))
 
     async def send_email_item(request):
+        try:
+            check_password(request)
+        except Exception as e:
+            return web.Response(text=str(e))
+
         id = request.match_info.get('id', None)
         if id:
             email = await get_email(id)
@@ -23,7 +41,17 @@ async def start_http_server(host, port):
 
         return web.Response(text="NOT")
 
+    async def clear_db(request):
+        try:
+            check_password(request)
+        except Exception as e:
+            return web.Response(text=str(e))
+
+        await clear_db()
+        return web.Response(text="OK")
+
     app.router.add_get('/', emails_list)
+    app.router.add_get('/clear', clear_db)
     app.router.add_get('/send/{id}', send_email_item)
 
     runner = web.AppRunner(app)

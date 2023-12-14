@@ -15,12 +15,19 @@ async def connect():
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             mail_from TEXT,
             rcpt_tos TEXT, -- SQLite does not support array types, so you might need to serialize this field
-            content TEXT
+            content TEXT,
+            sent BOOLEAN DEFAULT FALSE
         );
         """
     )
 
     return db
+
+
+async def clear_db():
+    db = await connect()
+    await db.execute("DROP TABLE IF EXISTS email;")
+    await db.close()
 
 
 async def create_email(mail_from, rcpt_tos, content):
@@ -73,6 +80,7 @@ async def get_email(id):
         return None
 
     id, created_at, updated_at, mail_from, rcpt_tos, content = row
+
     return dict(
         id=id,
         created_at=created_at,
@@ -81,3 +89,9 @@ async def get_email(id):
         rcpt_tos=json.loads(rcpt_tos),
         content=content,
     )
+
+
+async def mark_as_sent(id):
+    db = await connect()
+    await db.execute('UPDATE email SET sent = true, updated_at = CURRENT_TIMESTAMP WHERE id = ?', (id,))
+    await db.close()

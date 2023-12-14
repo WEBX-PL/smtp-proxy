@@ -56,13 +56,15 @@ async def get_emails():
     rows = await cursor.fetchall()
     data = []
     for id, created_at, updated_at, mail_from, rcpt_tos, content, sent in rows:
+        subject, body = parse_email(content)
         data.append(dict(
             id=id,
             created_at=created_at,
             updated_at=updated_at,
             mail_from=mail_from,
             rcpt_tos=json.loads(rcpt_tos),
-            content=content,
+            subject=subject,
+            body=body,
             sent=sent
         ))
     await cursor.close()

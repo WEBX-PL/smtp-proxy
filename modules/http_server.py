@@ -4,6 +4,7 @@ import os
 from aiohttp import web
 
 from modules.db import get_emails, get_email, clear_db
+from modules.parse_email import parse_email
 
 
 def check_password(request):
@@ -50,9 +51,35 @@ async def start_http_server(host, port):
         await clear_db()
         return web.Response(text="OK")
 
+    async def email_details(request):
+        try:
+            check_password(request)
+        except Exception as e:
+            return web.Response(text=str(e))
+
+        id = request.match_info.get('id', None)
+        if id:
+            email = await get_email(id)
+            if email:
+                subject, body = parse_email(email['content'])
+
+                return web.Response(text=json.dumps(dict(
+                    id=email['id'],
+                    sent=email['sent'],
+                    created_at=email['created_at'],
+                    updated_at=email['updated_at'],
+                    mail_from=email['mail_from'],
+                    rcpt_tos=email['rcpt_tos'],
+                    subject=subject,
+                    body=body,
+                )))
+
+        return web.Response(text="NOT")
+
     app.router.add_get('/', emails_list)
     app.router.add_get('/clear', clear)
     app.router.add_get('/send/{id}', send_email_item)
+    app.router.add_get('/email/{id}', email_details)
 
     runner = web.AppRunner(app)
     await runner.setup()

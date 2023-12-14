@@ -80,7 +80,7 @@ async def get_email(id):
     if not row:
         return None
 
-    id, created_at, updated_at, mail_from, rcpt_tos, content = row
+    id, created_at, updated_at, mail_from, rcpt_tos, content, sent = row
 
     return dict(
         id=id,
@@ -89,6 +89,7 @@ async def get_email(id):
         mail_from=mail_from,
         rcpt_tos=json.loads(rcpt_tos),
         content=content,
+        sent=sent
     )
 
 

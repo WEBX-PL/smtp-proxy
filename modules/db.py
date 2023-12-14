@@ -40,14 +40,9 @@ async def create_email(mail_from, rcpt_tos, content):
     await db.commit()
     await db.close()
 
-    id, mail_from, rcpt_tos, content = ("email_" + str(uuid.uuid4()), mail_from, json.dumps(rcpt_tos), content)
+    id, _, _, _ = email
 
-    return dict(
-        id=id,
-        mail_from=mail_from,
-        rcpt_tos=json.loads(rcpt_tos),
-        content=content,
-    )
+    return await get_email(id)
 
 
 async def get_emails():

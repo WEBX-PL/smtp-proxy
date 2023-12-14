@@ -41,7 +41,7 @@ async def start_http_server(host, port):
 
         return web.Response(text="NOT")
 
-    async def clear_db(request):
+    async def clear(request):
         try:
             check_password(request)
         except Exception as e:
@@ -51,7 +51,7 @@ async def start_http_server(host, port):
         return web.Response(text="OK")
 
     app.router.add_get('/', emails_list)
-    app.router.add_get('/clear', clear_db)
+    app.router.add_get('/clear', clear)
     app.router.add_get('/send/{id}', send_email_item)
 
     runner = web.AppRunner(app)

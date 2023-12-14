@@ -3,11 +3,8 @@ from email.header import decode_header
 
 
 def parse_email(raw_email):
-    # Decode bytes to string
-    email_str = raw_email.decode('unicode_escape')
-
     # Parse the email content
-    message = email.message_from_string(email_str)
+    message = email.message_from_string(raw_email)
 
     # Decode and get the subject
     subject = decode_header(message['Subject'])[0]

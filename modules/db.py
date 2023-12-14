@@ -53,7 +53,7 @@ async def get_emails():
     cursor = await db.execute('SELECT * FROM email ORDER BY created_at DESC LIMIT 50')
     rows = await cursor.fetchall()
     data = []
-    for id, created_at, updated_at, mail_from, rcpt_tos, content in rows:
+    for id, created_at, updated_at, mail_from, rcpt_tos, content, sent in rows:
         data.append(dict(
             id=id,
             created_at=created_at,
@@ -61,6 +61,7 @@ async def get_emails():
             mail_from=mail_from,
             rcpt_tos=json.loads(rcpt_tos),
             content=content,
+            sent=sent
         ))
     await cursor.close()
     await db.close()

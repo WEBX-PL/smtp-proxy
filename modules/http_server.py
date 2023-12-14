@@ -38,7 +38,7 @@ async def start_http_server(host, port):
             email = await get_email(id)
             if email:
                 print('sending...', email)
-                return web.Response(text="OK")
+                return web.Response(text="NOT IMPLEMENTED")
 
         return web.Response(text="NOT")
 

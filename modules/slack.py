@@ -57,7 +57,7 @@ async def send_notification(email):
                                 "emoji": True
                             },
                             "value": "click_me_123",
-                            "url": "http://164.90.161.12:8080/send/" + str(email[id]) + "?pass=" + os.getenv('PASSWORD'),
+                            "url": "http://164.90.161.12:8080/send/" + str(email['id']) + "?pass=" + os.getenv('PASSWORD'),
                             "action_id": "button-action"
                         }
                     ]

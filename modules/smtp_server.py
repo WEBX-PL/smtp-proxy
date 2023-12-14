@@ -1,7 +1,7 @@
 from aiosmtpd.controller import Controller
 from aiosmtpd.smtp import AuthResult
 
-from modules.db import create_email
+from modules.db import create_email, get_email
 from modules.slack import send_notification
 
 
@@ -18,8 +18,9 @@ class SMTPHandler:
             print(f'> {ln}'.strip())
         print()
         print('End of message')
-        email = await create_email(envelope.mail_from, envelope.rcpt_tos, str(envelope.content))
+        created = await create_email(envelope.mail_from, envelope.rcpt_tos, str(envelope.content))
 
+        email = await get_email(created['id'])
         await send_notification(email)
         return '250 Message accepted for delivery'
 

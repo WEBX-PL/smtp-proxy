@@ -64,3 +64,6 @@ async def s_email(email):
         await mark_as_sent(email['id'])
         return True
     return False
+
+if __name__ == "__main__":
+    send_email("mm@webx.pl", "asdad", "aaaa")

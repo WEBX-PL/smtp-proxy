@@ -38,8 +38,8 @@ async def start_http_server(host, port):
             email = await get_email(id)
             if email:
                 print('sending...', email)
-                if s_email(email):
-                    return web.Response(text="MAIL SENT")
+                if await s_email(email):
+                    return web.Response(text="MAIL: " + email['subject'] + " SENT TO: " + ', '.join(email['rcpt_tos']))
                 else:
                     return web.Response(text="MAIL NOT FOUND IN DATABASE OF USERS!")
 

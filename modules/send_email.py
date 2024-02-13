@@ -1,9 +1,11 @@
 import mysql.connector
 from mysql.connector import Error
+from postmarker.core import PostmarkClient
 
 from modules.db import mark_as_sent
 
-TOKEN = "7e8e8c79-8f88-4ac3-a65d-36437330a4a8"
+TOKEN = "029ca801-e6d8-45ba-a1f1-948cf3cf1809"
+
 
 def check_email_exists(email):
     try:
@@ -36,18 +38,17 @@ def check_email_exists(email):
         return False
 
 
-from postmark import PMMail
-
-
-def send_email(from_email, to_email, subject, body):
-    message = PMMail(api_key=TOKEN,
-                     subject=subject,
-                     sender=from_email,
-                     to=to_email,
-                     text_body=body)
+def send_email(to_email, subject, body):
+    postmark = PostmarkClient(server_token=TOKEN)
+    from_email = "application@kettlo.com"
 
     try:
-        message.send()
+        print(postmark.emails.send(
+            Subject=subject,
+            From=from_email,
+            To=to_email,
+            HtmlBody=body
+        ))
         print("Email sent successfully!")
     except Exception as e:
         print("Failed to send email:", e)
@@ -64,4 +65,3 @@ async def s_email(email):
         await mark_as_sent(email['id'])
         return True
     return False
-

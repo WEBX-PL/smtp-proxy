@@ -5,6 +5,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
 from modules.db import mark_as_sent
+from modules.send_email import s_email
 
 
 async def send_notification(email):
@@ -12,17 +13,21 @@ async def send_notification(email):
 
     slack_token = os.environ["SLACK_BOT_TOKEN"]
     client = WebClient(token=slack_token)
-
+    sent = False
+    try:
+        sent = s_email(email)
+    except Exception as e:
+        pass
 
     client.chat_postMessage(
         channel=os.environ["SLACK_CHANNEL_ID"],
-        text="You have a new email to verify",
+        text="Mail sent!" if sent else "You have a new email to verify",
         blocks=[
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "You have a new email to verify"
+                    "text": "Mail sent!" if sent else "You have a new email to verify"
                 }
             },
             {
@@ -68,21 +73,7 @@ async def send_notification(email):
                             'PASSWORD'),
                         "action_id": "button-action"
                     },
-                    {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Send it!",
-                            "emoji": True
-                        },
-                        "value": "click_me_123",
-                        "url": "http://164.90.161.12:8080/send/" + str(email['id']) + "?pass=" + os.getenv(
-                            'PASSWORD'),
-                        "action_id": "button-action2"
-                    }
                 ]
             }
         ]
     )
-
-    await mark_as_sent(email['id'])

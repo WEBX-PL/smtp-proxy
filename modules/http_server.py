@@ -4,7 +4,7 @@ import os
 from aiohttp import web
 
 from modules.db import get_emails, get_email, clear_db
-from modules.parse_email import parse_email
+from modules.send_email import s_email
 
 
 def check_password(request):
@@ -38,7 +38,10 @@ async def start_http_server(host, port):
             email = await get_email(id)
             if email:
                 print('sending...', email)
-                return web.Response(text="NOT IMPLEMENTED")
+                if s_email(email):
+                    return web.Response(text="MAIL SENT")
+                else:
+                    return web.Response(text="MAIL NOT FOUND IN DATABASE OF USERS!")
 
         return web.Response(text="NOT")
 

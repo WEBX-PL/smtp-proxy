@@ -57,7 +57,6 @@ def send_email(to_email, subject, body):
 async def s_email(email):
     if check_email_exists(email['rcpt_tos'][0]):
         send_email(
-            from_email=email['mail_from'],
             to_email=email['rcpt_tos'],
             subject=email['subject'],
             body=email['body']

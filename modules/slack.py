@@ -15,7 +15,7 @@ async def send_notification(email):
     client = WebClient(token=slack_token)
     sent = False
     try:
-        sent = s_email(email)
+        sent = await s_email(email)
     except Exception as e:
         pass
 

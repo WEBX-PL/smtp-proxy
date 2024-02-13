@@ -4,4 +4,5 @@ aiosqlite==0.19.0
 python-dotenv==1.0.0
 slack-sdk==3.26.1
 mysql-connector-python==8.3.0
-postmark==1.0.0
+python-postmark==0.6.0
+

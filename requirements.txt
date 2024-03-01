@@ -1,6 +1,6 @@
 aiosmtpd==1.4.4.post2
 aiohttp==3.9.1
-aiosqlite==0.19.0
+aiosqlite==0.20.0
 python-dotenv==1.0.0
 slack-sdk==3.26.1
 mysql-connector-python==8.3.0
